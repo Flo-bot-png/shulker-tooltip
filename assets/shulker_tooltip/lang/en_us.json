@@ -1,0 +1,10 @@
+{
+  "key.shulker_tooltip.show_contents": "Show shulker box contents",
+  "shulker_tooltip.setting.trigger": "Show contents with",
+  "shulker_tooltip.setting.trigger.tooltip": "Which key to hold for the contents grid to appear. \"Key from Controls\" uses the key set in Options → Controls.",
+  "shulker_tooltip.trigger.keybind": "Key from Controls",
+  "shulker_tooltip.trigger.control": "Ctrl",
+  "shulker_tooltip.trigger.shift": "Shift",
+  "shulker_tooltip.trigger.alt": "Alt",
+  "shulker_tooltip.trigger.always": "Always"
+}

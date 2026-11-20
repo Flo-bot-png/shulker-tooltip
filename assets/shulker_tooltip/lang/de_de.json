@@ -1,0 +1,10 @@
+{
+  "key.shulker_tooltip.show_contents": "Shulkerbox-Inhalt zeigen",
+  "shulker_tooltip.setting.trigger": "Inhalt zeigen mit",
+  "shulker_tooltip.setting.trigger.tooltip": "Welche Taste du halten musst, damit das Raster mit dem Inhalt erscheint. „Taste aus Steuerung“ nimmt die Taste aus Optionen → Steuerung.",
+  "shulker_tooltip.trigger.keybind": "Taste aus Steuerung",
+  "shulker_tooltip.trigger.control": "Strg",
+  "shulker_tooltip.trigger.shift": "Shift",
+  "shulker_tooltip.trigger.alt": "Alt",
+  "shulker_tooltip.trigger.always": "Immer"
+}
