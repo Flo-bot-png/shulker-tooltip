@@ -11,7 +11,7 @@
 //! `{slot: Int, item: {id, count, components}}`.
 
 use mod_api::{
-    self, ClientHost, Host, Hooks, ItemPart, ItemStack, ItemTooltipEvent, KeyConflictContext,
+    self, ClientHost, Host, HostBlockStates, Hooks, ItemPart, ItemStack, ItemTooltipEvent, KeyConflictContext,
     KeyRegistration, Registrar, RegistrationContext,
     RenderTooltipTextureEvent, SettingSpec, Tag, TooltipComponentDrawEvent,
     TooltipComponentEvent,
@@ -111,7 +111,7 @@ impl ItemPart for ShulkerPreview {
     ) {
         let slots = contents(host, event.stack);
         let host_ref: &dyn Host = host;
-        let color = box_color(&event.stack.item().id(host_ref)).unwrap_or(DEFAULT_COLOR);
+        let color = box_color(host_ref, event.stack).unwrap_or(DEFAULT_COLOR);
         let tint = 0xFF00_0000 | lighten(color);
 
         let [x0, y0] = event.origin;
@@ -188,7 +188,7 @@ fn preview_color(host: &dyn ClientHost, stack: &ItemStack) -> Option<u32> {
         return None;
     }
     let host_ref: &dyn Host = host;
-    let color = box_color(&stack.item().id(host_ref))?;
+    let color = box_color(host_ref, stack)?;
     (!is_empty(&contents(host, stack))).then_some(color)
 }
 
@@ -212,29 +212,22 @@ fn is_empty(slots: &[Option<ItemStack>; SLOTS]) -> bool {
 const DEFAULT_COLOR: u32 = 0x97_6997;
 
 /// Die Farbe einer Shulkerbox als `0xRRGGBB`, `None` wenn es keine Shulkerbox ist.
-fn box_color(id: &str) -> Option<u32> {
-    let name = id.strip_prefix("minecraft:").unwrap_or(id);
-    let color = match name {
-        "shulker_box" => DEFAULT_COLOR,
-        "white_shulker_box" => 0xF9_FFFE,
-        "orange_shulker_box" => 0xF9_801D,
-        "magenta_shulker_box" => 0xC7_4EBD,
-        "light_blue_shulker_box" => 0x3A_B3DA,
-        "yellow_shulker_box" => 0xFE_D83D,
-        "lime_shulker_box" => 0x80_C71F,
-        "pink_shulker_box" => 0xF3_8BAA,
-        "gray_shulker_box" => 0x47_4F52,
-        "light_gray_shulker_box" => 0x9D_9D97,
-        "cyan_shulker_box" => 0x16_9C9C,
-        "purple_shulker_box" => 0x89_32B8,
-        "blue_shulker_box" => 0x3C_44AA,
-        "brown_shulker_box" => 0x83_5432,
-        "green_shulker_box" => 0x5E_7C16,
-        "red_shulker_box" => 0xB0_2E26,
-        "black_shulker_box" => 0x1D_1D21,
-        _ => return None,
-    };
-    Some(color)
+/// Die Farbe kommt zur Laufzeit aus dem Spiel: die Kartenfarbe (`MapColor`) des Blocks,
+/// den das Item setzt. Die Mod enthält keine eigene Farbtabelle.
+fn box_color(host: &dyn Host, stack: &ItemStack) -> Option<u32> {
+    if !stack.item().id(host).ends_with("shulker_box") {
+        return None;
+    }
+    let runtime = (|| {
+        let block = host.item_block(stack.item())?;
+        let state = host.block_state_default(block)?;
+        let facts = host.block_states();
+        let id = facts.map_color(state)?;
+        // Volle Helligkeit: Farb-ID * 4 + 2.
+        let [r, g, b, a] = facts.map_color_rgba(id.checked_mul(4)?.checked_add(2)?)?;
+        (a > 0).then(|| u32::from(r) << 16 | u32::from(g) << 8 | u32::from(b))
+    })();
+    Some(runtime.unwrap_or(DEFAULT_COLOR))
 }
 
 /// Mischt eine Farbe zur Hälfte mit Weiß, damit die Items darauf gut lesbar bleiben.
@@ -315,14 +308,6 @@ mod tests {
         assert_eq!(slot_index(&Tag::Int(26)), Some(26));
         assert_eq!(slot_index(&Tag::Int(27)), None);
         assert_eq!(slot_index(&Tag::Int(-1)), None);
-    }
-
-    #[test]
-    fn every_shulker_box_has_a_colour() {
-        assert_eq!(box_color("minecraft:shulker_box"), Some(DEFAULT_COLOR));
-        assert_eq!(box_color("minecraft:red_shulker_box"), Some(0xB0_2E26));
-        assert_eq!(box_color("light_blue_shulker_box"), Some(0x3A_B3DA));
-        assert_eq!(box_color("minecraft:chest"), None);
     }
 
     #[test]

@@ -11,7 +11,7 @@ Hover over a shulker box and hold **Left Ctrl** to see what's inside: a 9×3 gri
 - **9×3 contents grid** in the tooltip, laid out exactly like the box itself.
 - **Only when you want it:** the grid appears while the key is held. Otherwise the tooltip stays vanilla.
 - **Clean tooltip:** while the grid is shown, the long item list disappears and only the box name stays.
-- **Colour-matched:** the slots are tinted in the colour of the shulker box, and the tooltip border uses a lighter shade of the same colour.
+- **Colour-matched:** the slots are tinted in the colour of the shulker box, and the tooltip border uses a lighter shade of the same colour. The colour is read from the game at runtime (the block's map colour), so the mod ships no colour table of its own.
 - **Configurable key:**
   - Set the key in *Options → Controls*.
   - Or pick Ctrl, Shift, Alt or *Always* on the mod's Config page in the mod menu.
