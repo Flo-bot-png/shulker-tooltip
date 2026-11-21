@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Hold Ctrl over a shulker box to see its contents as a colour-matched 9x3 grid in the tooltip."
 authors = ["Galaxis_Boarder"]
 # A native mod: Rust in src/, compiled by `cargo sunrise-mod build` against the game build [native] pins, beside data/ and assets/.
-side = "both"
+side = "client"
 
 [native]
 game = "26.3"
