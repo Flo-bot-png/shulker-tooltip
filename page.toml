@@ -1,0 +1,19 @@
+summary = "See what is inside a shulker box without placing it: hold Ctrl over it for a colour-matched 9×3 grid."
+description = """
+Hover a shulker box in any inventory and hold **Ctrl**: its tooltip shows the contents as a 9×3 grid, exactly as they sit in the box, with stack counts.
+
+- The grid takes the box's own colour, so a yellow box shows a yellow grid.
+- Works in every inventory and container screen, in creative too.
+- Empty boxes show an empty grid, so you know at a glance.
+
+Client-side only: it works on any server.
+"""
+categories = ["storage", "utility"]
+
+[[screenshots]]
+path = "page/shulker_full.png"
+caption = "A full shulker box, its contents in the tooltip"
+
+[[screenshots]]
+path = "page/shulker_empty.png"
+caption = "An empty yellow box: the grid takes the box's colour"
