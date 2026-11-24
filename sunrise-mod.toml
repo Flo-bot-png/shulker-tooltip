@@ -1,8 +1,9 @@
 id = "shulker_tooltip"
 name = "Shulker Tooltip"
-version = "0.1.1"
+version = "0.1.2"
 description = "Hold Ctrl over a shulker box to see its contents as a colour-matched 9x3 grid in the tooltip."
 authors = ["Galaxis_Boarder"]
+license = "MIT"
 # A native mod: Rust in src/, compiled by `cargo sunrise-mod build` against the game build [native] pins, beside data/ and assets/.
 side = "client"
 
